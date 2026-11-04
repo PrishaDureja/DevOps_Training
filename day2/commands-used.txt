@@ -1,0 +1,87 @@
+    1  echo "hello from ubuntu" > /workspace/test.txt
+    2  exit
+    3  ls /workspace
+    4  git --version
+    5  exit
+    6  echo "cd /workspace" >> ~/.bashrc
+    7  exit
+    8  pwd
+    9  echo "my first real file" > first.txt
+   10  ls
+   11  exit
+   12  git config --global user.name "Prisha Dureja"
+   13  git config --global user.email "durejaprisha17@gmail.com"
+   14  ssh-keygen -t ed25519 -C "durejaprisha17@gmail.com"
+   15  cat ~/.ssh/id_ed25519.pub
+   16  ssh -T git@github.com
+   17  cd /workspace
+   18  git clone git@github.com:PrishaDureja/DevOps_Training.git
+   19  cd DevOps_Training
+   20  ls
+   21  cat > /usr/local/bin/daysave << 'EOF'
+   22  #!/bin/bash
+   23  cd /workspace/DevOps_Training || exit 1
+   24  git add -A
+   25  if git diff --cached --quiet; then
+   26    echo "Nothing new to save."
+   27    exit 0
+   28  fi
+   29  CHANGED=$(git diff --cached --name-status)
+   30  echo "Describe what you did today (one line):"
+   31  read -r MSG
+   32  DATE=$(date +"%Y-%m-%d")
+   33  git commit -m "$DATE: $MSG" -m "Files changed:" -m "$CHANGED"
+   34  git push -u origin HEAD
+   35  echo "Saved to GitHub."
+   36  EOF
+   37  chmod +x /usr/local/bin/daysave
+   38  cd /workspace/DevOps_Training
+   39  echo "# Day 1 notes" > day1.md
+   40  daysave
+   41  exit
+   42  groupadd devs
+   43  groupadd ops
+   44  useradd -m -s /bin/bash -G devs alice
+   45  useradd -m -s /bin/bash -G devs bob
+   46  useradd -m -s /bin/bash -G ops carol
+   47  id alice
+   48  id bob
+   49  id carol
+   50  getent group devs ops
+   51  mkdir -p /srv/lab/alice /srv/lab/devs-share /srv/lab/dropbox
+   52  chown alice:alice /srv/lab/alice
+   53  su - alice -c 'echo "alice secret" > /srv/lab/alice/secret.txt'
+   54  su - bob -c 'cat /srv/lab/alice/secret.txt'
+   55  su - alice -c 'chmod 600 /srv/lab/alice/secret.txt'
+   56  su - bob -c 'cat /srv/lab/alice/secret.txt'
+   57  ls -l /srv/lab/alice/secret.txt
+   58  chown root:devs /srv/lab/devs-share
+   59  chmod 2770 /srv/lab/devs-share
+   60  su - alice -c 'umask 002; echo "from alice" > /srv/lab/devs-share/plan.txt'
+   61  su - bob -c 'echo "from bob" >> /srv/lab/devs-share/plan.txt'
+   62  cat /srv/lab/devs-share/plan.txt
+   63  su - carol -c 'ls /srv/lab/devs-share'
+   64  ls -ld /srv/lab/devs-share
+   65  su - alice -c 'printf "#!/bin/bash\necho Hello from script\n" > /srv/lab/alice/hello.sh'
+   66  su - alice -c '/srv/lab/alice/hello.sh'
+   67  su - alice -c 'chmod u+x /srv/lab/alice/hello.sh'
+   68  su - alice -c '/srv/lab/alice/hello.sh'
+   69  echo "owned by root" > /srv/lab/alice/report.txt
+   70  su - alice -c 'echo "alice edit" >> /srv/lab/alice/report.txt'
+   71  chown alice:devs /srv/lab/alice/report.txt
+   72  su - alice -c 'echo "alice edit" >> /srv/lab/alice/report.txt'
+   73  cat /srv/lab/alice/report.txt
+   74  ls -l /srv/lab/alice/report.txt
+   75  chmod 777 /srv/lab/dropbox
+   76  su - alice -c 'touch /srv/lab/dropbox/alice.txt'
+   77  su - bob -c 'rm /srv/lab/dropbox/alice.txt'
+   78  ls /srv/lab/dropbox
+   79  su - bob -c 'rm /srv/lab/dropbox/alice.txt'
+   80  ls /srv/lab/dropbox
+   81  chmod 1777 /srv/lab/dropbox
+   82  su - alice -c 'touch /srv/lab/dropbox/alice.txt'
+   83  su - bob -c 'rm /srv/lab/dropbox/alice.txt'
+   84  ls -ld /srv/lab/dropbox
+   85  mkdir -p /workspace/DevOps_Training/day2
+   86  nano /workspace/DevOps_Training/day2/permissions-lab.md
+   87  history | tail -150 > /workspace/DevOps_Training/day2/commands-used.txt
