@@ -1,0 +1,13 @@
+[Unit]
+Description=Heartbeat service that logs the time every 10 seconds
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/heartbeat.sh
+User=heartbeat
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
