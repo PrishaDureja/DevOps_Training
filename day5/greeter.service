@@ -1,0 +1,13 @@
+[Unit]
+Description=Greeter service that says hello every 15 seconds
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/greeter.sh
+User=greeter
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

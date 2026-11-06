@@ -1,0 +1,13 @@
+[Unit]
+Description=Shop web server
+After=network.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/nginx -t -c /etc/shop-web/nginx.conf
+ExecStart=/usr/sbin/nginx -c /etc/shop-web/nginx.conf -g 'daemon off;'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

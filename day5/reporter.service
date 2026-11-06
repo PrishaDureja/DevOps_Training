@@ -1,0 +1,13 @@
+[Unit]
+Description=Reporter service that writes a report line every 10 seconds
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/reporter.sh
+User=reporter
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
