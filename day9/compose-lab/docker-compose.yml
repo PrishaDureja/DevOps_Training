@@ -1,0 +1,27 @@
+services:
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "8090:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    ports:
+      - "8091:5000"
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
